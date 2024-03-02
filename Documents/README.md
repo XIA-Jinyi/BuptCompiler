@@ -4,4 +4,4 @@
 
 ---
 
-__项目主页__：[BuptCompiler](https://github.com/XIA-Jinyi/BuptCompiler/tree/main)
+__项目主页__：[BuptCompiler](https://github.com/XIA-Jinyi/BuptCompiler)
