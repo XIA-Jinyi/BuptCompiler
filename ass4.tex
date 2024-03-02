@@ -1,0 +1,419 @@
+\documentclass{CompilerAssignment}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{longtable}
+
+\newcommand{\mbfa}{\mathbf{a}}
+\newcommand{\bfa}{\textbf{a}}
+\newcommand{\first}{\text{FIRST}}
+\newcommand{\follow}{\text{FOLLOW}}
+
+\setlength{\columnseprule}{0.5pt}
+
+\title{Assignment 4}
+
+\begin{document}
+
+\maketitle
+
+The grammar \(G\) is given as follows:
+
+\begin{equation*}
+    \begin{aligned}
+        & (1) & S & \rightarrow \mbfa B, \\
+        & (2) & B & \rightarrow S + B, \\
+        & (3) & B & \rightarrow \epsilon.
+    \end{aligned}
+\end{equation*}
+
+Consider the augmented grammar \(G'\):
+
+\begin{equation*}
+    \begin{aligned}
+        S' & \rightarrow S, \\
+        S & \rightarrow \mbfa B, \\
+        B & \rightarrow S + B \mid \epsilon.
+    \end{aligned}
+\end{equation*}
+
+\section{Exercise 1}
+
+\begin{enumerate}
+    \item Calculate the FIRST and FOLLOW sets for \(G\).
+    \begin{align*}
+        \first(S) &= \{ \mbfa \}, \\
+        \first(B) &= \{ \mbfa, \epsilon \}, \\
+        \follow(S) &= \{ +, \$ \}, \\
+        \follow(B) &= \{ +, \$ \}.
+    \end{align*}
+
+    Construct the collection of sets of LR(0) items for \(G'\).
+    \begin{multicols}{3}
+        \begin{enumerate}
+            \item[$I_0$:]
+            \[
+                \begin{aligned}
+                    S' & \rightarrow \cdot S \\
+                    S & \rightarrow \cdot \mbfa B
+                \end{aligned}
+            \]
+    
+            \item[$I_1$:]
+            \[
+                \begin{aligned}
+                    S' & \rightarrow S \cdot
+                \end{aligned}
+            \]
+    
+            \item[$I_2$:]
+            \[
+                \begin{aligned}
+                    S & \rightarrow \mbfa \cdot B \\
+                    B & \rightarrow \cdot S + B \\
+                    B & \rightarrow \cdot \\
+                    S & \rightarrow \cdot \mbfa B
+                \end{aligned}
+            \]
+
+            \item[$I_3$:]
+            \[
+                \begin{aligned}
+                    S & \rightarrow \mbfa B \cdot
+                \end{aligned}
+            \]
+    
+            \item[$I_4$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S \cdot + B
+                \end{aligned}
+            \]
+    
+            \item[$I_5$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S + \cdot B \\
+                    B & \rightarrow \cdot S + B \\
+                    B & \rightarrow \cdot \\
+                    S & \rightarrow \cdot \mbfa B
+                \end{aligned}
+            \]
+    
+            \item[$I_6$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S + B \cdot
+                \end{aligned}
+            \]
+        \end{enumerate}
+    \end{multicols}
+
+    Construct the SLR(1) parsing table for \(G'\).
+    \begin{center}
+        \begin{tabular}{c|ccc|cc}
+            \hline \hline
+            \multirow{2}{*}{\textsc{State}} & \multicolumn{3}{c|}{\textsc{Action}} & \multicolumn{2}{c}{\textsc{Goto}} \\ \cline{2-6}
+                            & \(\mbfa\) & \(+\) & \(\$\) & \(S\) & \(B\) \\ \hline
+            0 & s2 & & & 1 & \\
+            1 & & & acc & & \\
+            2 & s2 & r3 & r3 & 4 & 3 \\
+            3 & & r1 & r1 & & \\
+            4 & & s5 & & & \\
+            5 & s2 & r3 & r3 & 4 & 6 \\
+            6 & & r2 & r2 & & \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    \item Yes, it is.
+    
+    \item Yes, it can.
+    \begin{center}
+        \begin{tabular}{r|l|l|r|l}
+            \hline \hline
+            & \textsc{Stack} & \textsc{Symbols} & \textsc{Input} & \textsc{Action} \\ \hline
+            (1) & 0 & & \(\mbfa\mbfa\mbfa\mbfa\)\(+\)\(++\)\$ & shift \\
+            (2) & 0 2 & \(\mbfa\) & \(\mbfa\mbfa\mbfa\)\(+\)\(++\)\$ & shift \\
+            (3) & 0 2 2 & \(\mbfa\mbfa\) & \(\mbfa\mbfa\)\(+\)\(++\)\$ & shift \\
+            (4) & 0 2 2 2 & \(\mbfa\mbfa\mbfa\) & \(\mbfa\)\(+\)\(++\)\$ & shift \\
+            (5) & 0 2 2 2 2 & \(\mbfa\mbfa\mbfa\mbfa\) & \(+\)\(++\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+            (6) & 0 2 2 2 2 3 & \(\mbfa\mbfa\mbfa\mbfa B\) & \(+\)\(++\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+            (7) & 0 2 2 2 4 & \(\mbfa\mbfa\mbfa S\) & \(+\)\(++\)\$ & shift \\
+            (8) & 0 2 2 2 4 5 & \(\mbfa\mbfa\mbfa S+\) & \(++\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+            (9) & 0 2 2 2 4 5 6 & \(\mbfa\mbfa\mbfa S+B\) & \(++\)\$ & reduce by \(B \rightarrow S + B\) \\
+            (10) & 0 2 2 2 3 & \(\mbfa\mbfa\mbfa B\) & \(++\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+            (11) & 0 2 2 4 & \(\mbfa\mbfa S\) & \(++\)\$ & shift \\
+            (12) & 0 2 2 4 5 & \(\mbfa\mbfa S+\) & \(+\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+            (13) & 0 2 2 4 5 6 & \(\mbfa\mbfa S+B\) & \(+\)\$ & reduce by \(B \rightarrow S + B\) \\
+            (14) & 0 2 2 3 & \(\mbfa\mbfa B\) & \(+\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+            (15) & 0 2 4 & \(\mbfa S\) & \(+\)\$ & shift \\
+            (16) & 0 2 4 5 & \(\mbfa S+\) & \$ & reduce by \(B \rightarrow \epsilon\) \\
+            (17) & 0 2 4 5 6 & \(\mbfa S+B\) & \$ & reduce by \(B \rightarrow S + B\) \\
+            (18) & 0 2 3 & \(\mbfa B\) & \$ & reduce by \(S \rightarrow \mbfa B\) \\
+            (19) & 0 1 & \(S\) & \$ & accept \\
+            \hline
+        \end{tabular}
+    \end{center}
+\end{enumerate}
+
+\section{Exercise 2}
+
+\begin{enumerate}
+    \item Construct the collection of sets of LR(1) items for \(G'\).
+    \begin{multicols}{4}
+        \begin{enumerate}
+            \item[$I_0$:]
+            \[
+                \begin{aligned}
+                    S' & \rightarrow \cdot S,&\$ \\
+                    S & \rightarrow \cdot \mbfa B,&\$
+                \end{aligned}
+            \]
+    
+            \item[$I_1$:]
+            \[
+                \begin{aligned}
+                    S' & \rightarrow S \cdot,&\$
+                \end{aligned}
+            \]
+    
+            \item[$I_2$:]
+            \[
+                \begin{aligned}
+                    S & \rightarrow \mbfa \cdot B,&\$ \\
+                    B & \rightarrow \cdot S + B,&\$ \\
+                    B & \rightarrow \cdot,&\$ \\
+                    S & \rightarrow \cdot \mbfa B,&+
+                \end{aligned}
+            \]
+
+            \item[$I_3$:]
+            \[
+                \begin{aligned}
+                    S & \rightarrow \mbfa B \cdot,&\$
+                \end{aligned}
+            \]
+    
+            \item[$I_4$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S \cdot + B,&\$
+                \end{aligned}
+            \]
+
+            \item[$I_5$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S + \cdot B,&\$ \\
+                    B & \rightarrow \cdot S + B,&\$ \\
+                    B & \rightarrow \cdot,&\$ \\
+                    S & \rightarrow \cdot \mbfa B,&+
+                \end{aligned}
+            \]
+
+            \item[$I_6$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S + B \cdot,&\$
+                \end{aligned}
+            \]
+
+            \item[$I_7$:]
+            \[
+                \begin{aligned}
+                    S & \rightarrow \mbfa \cdot B,&+ \\
+                    B & \rightarrow \cdot S + B,&+ \\
+                    B & \rightarrow \cdot,&+ \\
+                    S & \rightarrow \cdot \mbfa B,&+
+                \end{aligned}
+            \]
+
+            \item[$I_8$:]
+            \[
+                \begin{aligned}
+                    S & \rightarrow \mbfa B \cdot,&+
+                \end{aligned}
+            \]
+
+            \item[$I_9$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S \cdot + B,&+
+                \end{aligned}
+            \]
+
+            \item[$I_{10}$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S + \cdot B,&+ \\
+                    B & \rightarrow \cdot S + B,&+ \\
+                    B & \rightarrow \cdot,&+ \\
+                    S & \rightarrow \cdot \mbfa B,&+
+                \end{aligned}
+            \]
+
+            \item[$I_{11}$:]
+            \[
+                \begin{aligned}
+                    B & \rightarrow S + B \cdot,&+
+                \end{aligned}
+            \]
+        \end{enumerate}
+    \end{multicols}
+
+    Construct the canonical LR(1) parsing table for \(G'\).
+    
+    \begin{center}
+        \begin{tabular}{c|ccc|cc}
+            \hline \hline
+            \multirow{2}{*}{\textsc{State}} & \multicolumn{3}{c|}{\textsc{Action}} & \multicolumn{2}{c}{\textsc{Goto}} \\ \cline{2-6}
+                            & \(\mbfa\) & \(+\) & \(\$\) & \(S\) & \(B\) \\ \hline
+            0 & s2 & & & 1 & \\
+            1 & & & acc & & \\
+            2 & s7 & & r3 & 4 & 3 \\
+            3 & & & r1 & & \\
+            4 & & s5 & & & \\
+            5 & s7 & & r3 & 4 & 6 \\
+            6 & & & r2 & & \\
+            7 & s7 & r3 & & 9 & 8 \\
+            8 & & r1 & & & \\
+            9 & & s10 & & & \\
+            10 & s7 & r3 & & 9 & 11 \\
+            11 & & r2 & & & \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    \item Yes, it can.
+
+    \begin{longtable}{r|l|l|r|l}
+        \hline \hline
+        & \textsc{Stack} & \textsc{Symbols} & \textsc{Input} & \textsc{Action} \\ \hline
+        \endfirsthead
+        \multicolumn{5}{@{}l}{(continued)} \\
+        \hline \hline
+        & \textsc{Stack} & \textsc{Symbols} & \textsc{Input} & \textsc{Action} \\ \hline
+        \endhead
+        \hline
+        \endfoot
+        (1) & 0 & & \(\mbfa\mbfa\mbfa\mbfa\)\(+\)\(++\)\$ & shift \\
+        (2) & 0 2 & \(\mbfa\) & \(\mbfa\mbfa\mbfa\)\(+\)\(++\)\$ & shift \\
+        (3) & 0 2 7 & \(\mbfa\mbfa\) & \(\mbfa\mbfa\)\(+\)\(++\)\$ & shift \\
+        (4) & 0 2 7 7 & \(\mbfa\mbfa\mbfa\) & \(\mbfa\)\(+\)\(++\)\$ & shift \\
+        (5) & 0 2 7 7 7 & \(\mbfa\mbfa\mbfa\mbfa\) & \(+\)\(++\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+        (6) & 0 2 7 7 7 8 & \(\mbfa\mbfa\mbfa\mbfa B\) & \(+\)\(++\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+        (7) & 0 2 7 7 9 & \(\mbfa\mbfa\mbfa S\) & \(+\)\(++\)\$ & shift \\
+        (8) & 0 2 7 7 9 10 & \(\mbfa\mbfa\mbfa S+\) & \(++\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+        (9) & 0 2 7 7 9 10 11 & \(\mbfa\mbfa\mbfa S+B\) & \(++\)\$ & reduce by \(B \rightarrow S + B\) \\
+        (10) & 0 2 7 7 8 & \(\mbfa\mbfa\mbfa B\) & \(++\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+        (11) & 0 2 7 9 & \(\mbfa\mbfa S\) & \(++\)\$ & shift \\
+        (12) & 0 2 7 9 10 & \(\mbfa\mbfa S+\) & \(+\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+        (13) & 0 2 7 9 10 11 & \(\mbfa\mbfa S+B\) & \(+\)\$ & reduce by \(B \rightarrow S + B\) \\
+        (14) & 0 2 7 8 & \(\mbfa\mbfa B\) & \(+\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+        (15) & 0 2 9 & \(\mbfa S\) & \(+\)\$ & shift \\
+        (16) & 0 2 9 10 & \(\mbfa S+\) & \$ & reduce by \(B \rightarrow \epsilon\) \\
+        (17) & 0 2 9 10 11 & \(\mbfa S+B\) & \$ & reduce by \(B \rightarrow S + B\) \\
+        (18) & 0 2 8 & \(\mbfa B\) & \$ & reduce by \(S \rightarrow \mbfa B\) \\
+        (19) & 0 1 & \(S\) & \$ & accept \\
+    \end{longtable}
+\end{enumerate}
+
+\section{Exercise 3}
+
+\begin{enumerate}
+    \item There are 5 pairs of sets of items that can be merged.
+    
+    $I_2$ and $I_7$ are replaced by their union:
+    \[
+        \begin{aligned}
+            &I_{2,7}: &S &\rightarrow \mbfa \cdot B,&+/\$ \\
+            & &B &\rightarrow \cdot S + B,&+/\$ \\
+            & &B &\rightarrow \cdot,&+/\$ \\
+            & &S &\rightarrow \cdot \mbfa B,&+/\$ \\
+        \end{aligned}
+    \]
+    
+    $I_3$ and $I_8$ are replaced by their union:
+    \[
+        \begin{aligned}
+            &I_{3,8}: &S &\rightarrow \mbfa B \cdot,&+/\$ \\
+        \end{aligned}
+    \]
+
+    $I_4$ and $I_9$ are replaced by their union:
+    \[
+        \begin{aligned}
+            &I_{4,9}: &B &\rightarrow S \cdot + B,&+/\$ \\
+        \end{aligned}
+    \]
+
+    $I_5$ and $I_{10}$ are replaced by their union:
+    \[
+        \begin{aligned}
+            &I_{5,10}: &B &\rightarrow S + \cdot B,&+/\$ \\
+            & &B &\rightarrow \cdot S + B,&+/\$ \\
+            & &B &\rightarrow \cdot,&+/\$ \\
+            & &S &\rightarrow \cdot \mbfa B,&+/\$ \\
+        \end{aligned}
+    \]
+
+    $I_6$ and $I_{11}$ are replaced by their union:
+    \[
+        \begin{aligned}
+            &I_{6,11}: &B &\rightarrow S + B \cdot,&+/\$ \\
+        \end{aligned}
+    \]
+
+    The LALR(1) parsing table for \(G'\) is as follows.
+    
+    \begin{center}
+        \begin{tabular}{c|ccc|cc}
+            \hline \hline
+            \multirow{2}{*}{\textsc{State}} & \multicolumn{3}{c|}{\textsc{Action}} & \multicolumn{2}{c}{\textsc{Goto}} \\ \cline{2-6}
+                            & \(\mbfa\) & \(+\) & \(\$\) & \(S\) & \(B\) \\ \hline
+            0 & s2,7 & & & 1 & \\
+            1 & & & acc & & \\
+            2,7 & s2,7 & r3 & r3 & 4,9 & 3,8 \\
+            3,8 & & r1 & r1 & & \\
+            4,9 & & s5,10 & & & \\
+            5,10 & s2,7 & r3 & r3 & 4,9 & 6,11 \\
+            6,11 & & r2 & r2 & & \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    \item Yes, it can.
+    
+    \begin{longtable}{r|l|l|r|l}
+        \hline \hline
+        & \textsc{Stack} & \textsc{Symbols} & \textsc{Input} & \textsc{Action} \\ \hline
+        \endfirsthead
+        \multicolumn{5}{@{}l}{(continued)} \\
+        \hline \hline
+        & \textsc{Stack} & \textsc{Symbols} & \textsc{Input} & \textsc{Action} \\ \hline
+        \endhead
+        \hline
+        \endfoot
+        (1) & 0 & & \(\mbfa\mbfa\mbfa\mbfa +++\)\$ & shift \\
+        (2) & 0\ \  2,7 & \(\mbfa\) & \(\mbfa\mbfa\mbfa\)\(+\)\(++\)\$ & shift \\
+        (3) & 0\ \  2,7\ \  2,7 & \(\mbfa\mbfa\) & \(\mbfa\mbfa\)\(+\)\(++\)\$ & shift \\
+        (4) & 0\ \  2,7\ \  2,7\ \  2,7 & \(\mbfa\mbfa\mbfa\) & \(\mbfa\)\(+\)\(++\)\$ & shift \\
+        (5) & 0\ \  2,7\ \  2,7\ \  2,7\ \  2,7 & \(\mbfa\mbfa\mbfa\mbfa\) & \(+\)\(++\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+        (6) & 0\ \  2,7\ \  2,7\ \  2,7\ \  2,7\ \  3,8 & \(\mbfa\mbfa\mbfa\mbfa B\) & \(+\)\(++\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+        (7) & 0\ \  2,7\ \  2,7\ \  2,7\ \  4,9 & \(\mbfa\mbfa\mbfa S\) & \(+\)\(++\)\$ & shift \\
+        (8) & 0\ \  2,7\ \  2,7\ \  2,7\ \  4,9\ \  5,10 & \(\mbfa\mbfa\mbfa S+\) & \(++\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+        (9) & 0\ \  2,7\ \  2,7\ \  2,7\ \  4,9\ \  5,10\ \  6,11 & \(\mbfa\mbfa\mbfa S+B\) & \(++\)\$ & reduce by \(B \rightarrow S + B\) \\
+        (10) & 0\ \ 2,7\ \  2,7\ \  2,7\ \  3,8 & \(\mbfa\mbfa\mbfa B\) & \(++\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+        (11) & 0\ \ 2,7\ \  2,7\ \  4,9 & \(\mbfa\mbfa S\) & \(++\)\$ & shift \\
+        (12) & 0\ \ 2,7\ \  2,7\ \  4,9\ \  5,10 & \(\mbfa\mbfa S+\) & \(+\)\$ & reduce by \(B \rightarrow \epsilon\) \\
+        (13) & 0\ \ 2,7\ \  2,7\ \  4,9\ \  5,10\ \  6,11 & \(\mbfa\mbfa S+B\) & \(+\)\$ & reduce by \(B \rightarrow S + B\) \\
+        (14) & 0\ \ 2,7\ \  2,7\ \  3,8 & \(\mbfa\mbfa B\) & \(+\)\$ & reduce by \(S \rightarrow \mbfa B\) \\
+        (15) & 0\ \ 2,7\ \  4,9 & \(\mbfa S\) & \(+\)\$ & shift \\
+        (16) & 0\ \ 2,7\ \  4,9\ \  5,10 & \(\mbfa S+\) & \$ & reduce by \(B \rightarrow \epsilon\) \\
+        (17) & 0\ \ 2,7\ \  4,9\ \  5,10\ \  6,11 & \(\mbfa S+B\) & \$ & reduce by \(B \rightarrow S + B\) \\
+        (18) & 0\ \ 2,7\ \  3,8 & \(\mbfa B\) & \$ & reduce by \(S \rightarrow \mbfa B\) \\
+        (19) & 0\ \ 1 & \(S\) & \$ & accept \\
+    \end{longtable}
+\end{enumerate}
+
+\end{document}
