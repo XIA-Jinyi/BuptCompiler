@@ -28,6 +28,16 @@
 
     课程没有提供 [Project 3](https://github.com/XIA-Jinyi/BuptCompiler/blob/main/Documents/Project%203.md) 和 [Project 4](https://github.com/XIA-Jinyi/BuptCompiler/blob/main/Documents/Project%204.md) 的相关文档，作者参考相关文档，撰写了这两份中文文档。可以在 [Documents 目录](https://github.com/XIA-Jinyi/BuptCompiler/tree/main/Documents) 下找到。
 
+## 反馈
+
+如果你有任何问题或建议，欢迎提交 [Issue](https://github.com/XIA-Jinyi/BuptCompiler/issues) 或 [Pull Request](https://github.com/XIA-Jinyi/BuptCompiler/pulls)。
+
+你也可以通过 [作者主页](https://xia-jinyi.github.io/) 的联系方式与作者取得联系。
+
+## 许可
+
+本仓库的所有内容均采用 [GNU General Public License v3.0](https://github.com/XIA-Jinyi/BuptCompiler/blob/main/LICENSE) 进行许可。
+
 ## 感谢
 
 感谢 Y. Guo 老师的教学与 G. Yang, F. Meng 两位助教的付出。
