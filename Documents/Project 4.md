@@ -76,12 +76,12 @@ MIPS32 将加载和存储原语分开。 在这种架构下，计算指令的操
 
 ```assembly
 read:
-	li $v0, 4
-	la $a0, _prmpt
-	syscall
-	li $v0, 5
-	syscall
-	jr $ra
+    li $v0, 4
+    la $a0, _prmpt
+    syscall
+    li $v0, 5
+    syscall
+    jr $ra
 ```
 
 这里的第一行定义了一个标签 `read`，它对应于函数标识符。 请注意，汇编代码不区分标签名称或函数名称，它们都是标签。 然后 `li` 指令将立即数 4 加载到寄存器 `$v0` 中。 `la` 指令将地址加载到 `$a0`。 这里的地址是在数据段中声明的自定义标识符 `_prmpt`，它是一串提示信息。 系统调用指令触发软件中断以调用特定的操作系统服务。 该服务号已加载到 `$v0` 中。 在本例中，系统调用服务为 4（`print_string`）。 接下来的两行执行 `read_int` 服务。 最后，该过程通过无条件跳转jr返回到返回地址寄存器 `$ra` 中存储的位置。
@@ -144,31 +144,31 @@ ry = Ensure(y)
 rz = Allocate(z)
 Emit([rz := rx op ry])
 if (x is not needed after the current operation)
-	Free(rx)
+    Free(rx)
 if (y is not needed after the current operation)
-	Free(ry)
+    Free(ry)
 ```
 
 函数 `Free` 将寄存器标记为空闲，`Emit` 输出一条 MIPS32 指令。 另外两个辅助功能是：
 
 ```C
 Ensure(x):
-	if (x is already in register r)
-		result = r
-	else
-		result = Allocate(x)
-		Emit([lw result, x])
-	return result
+    if (x is already in register r)
+        result = r
+    else
+        result = Allocate(x)
+        Emit([lw result, x])
+    return result
 ```
 
 ```C
 Allocate(x):
-	if (exists idle register r)
-		result = r
-	else
-		result = register whose value’s next-use is the farthest
-		spill result
-	return result
+    if (exists idle register r)
+        result = r
+    else
+        result = register whose value’s next-use is the farthest
+        spill result
+    return result
 ```
 
 教科书第 8.6.3 节中描述的 `getReg` 与我们的算法类似。 教科书中的 `getReg` 函数引入了寄存器描述符和地址描述符来消除寄存器之间的数据移动，希望最大限度地减少加载/存储指令的数量。 它更有效，但也更复杂。 您可以选择实现 `getReg` 函数而不是此处描述的本地寄存器分配算法，甚至可以设计并实现您自己的策略。
@@ -199,16 +199,18 @@ Allocate(x):
 3. 如果 `i` 是返回语句，那么  $succ[i]=\emptyset$；
 4. 其他情况 $succ[i]=\{i+1\}$。
 
-然后我们将集合 $def[i]$ 定义为在指令 `i` 处定义的变量，$use[i]$ 为在 `i` 处使用/读取的变量集，$in[i]$ 为执行 `i` 之前有效的变量，$out [i]$ 作为执行 `i` 后的实时变量。
+然后我们将集合 $def[i]$ 定义为在指令 `i` 处定义的变量， $use[i]$ 为在 `i` 处使用/读取的变量集， $in[i]$ 为执行 `i` 之前有效的变量， $out [i]$ 作为执行 `i` 后的实时变量。
 
 遵循这些定义，我们可以将活性分析问题形式化为数据流方程：
+
 $$
 \begin{cases}
 in[i]=use[i]\cup(out[i]-def[i]) \\
 out[i]=\bigcup_{j\in succ[i]}in[j]
 \end{cases}
 $$
-方程组可以迭代求解：一开始，$in[i] = \emptyset$。 然后，对于每条指令 `i`，我们根据（1）更新 `in[i]` 和 `out[i]`，直到所有集合收敛到固定大小。 实际上，根据格理论，`in[i]` 和 `out[i]` 的求值顺序并不影响收敛性。 然而，以相反的顺序（即从代码末尾到开头）评估它们可能会更快地收敛。
+
+方程组可以迭代求解：一开始， $in[i] = \emptyset$ 。 然后，对于每条指令 `i`，我们根据（1）更新 `in[i]` 和 `out[i]`，直到所有集合收敛到固定大小。 实际上，根据格理论，`in[i]` 和 `out[i]` 的求值顺序并不影响收敛性。 然而，以相反的顺序（即从代码末尾到开头）评估它们可能会更快地收敛。
 
 > **实现提示**
 >
@@ -336,7 +338,7 @@ lw livek, offset[livek]($sp)
 ```c
 tac *emit_label(tac *label) {
     assert(_tac_kind(label) == LABEL);
-	_mips_printf("label%d:", _tac_quadruple(label).labelno->int_val);
+    _mips_printf("label%d:", _tac_quadruple(label).labelno->int_val);
     return label->next;
 }
 ```
