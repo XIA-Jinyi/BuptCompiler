@@ -1,0 +1,12 @@
+[submodule "Project1"]
+	path = Project1
+	url = https://github.com/XIA-Jinyi/BuptCompiler-Project1.git
+[submodule "Project2"]
+	path = Project2
+	url = https://github.com/XIA-Jinyi/BuptCompiler-Project2.git
+[submodule "Labs"]
+	path = Labs
+	url = https://github.com/XIA-Jinyi/BuptCompiler-Labs.git
+[submodule "Assignments/source"]
+	path = Assignments/source
+	url = https://github.com/XIA-Jinyi/BuptCompiler-Assignments.git
