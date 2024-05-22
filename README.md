@@ -16,7 +16,7 @@
 
     作者提供了自己 6 次实验的源代码和报告，可以在 [Labs 仓库](https://github.com/XIA-Jinyi/BuptCompiler-Labs)下找到。
 
-- 🧑🏻‍💻 __Projects:__ 项目
+- 💻 __Projects:__ 项目
 
     作者提供了自己 2 次项目的源代码和报告，可以在 [Project1 仓库](https://github.com/XIA-Jinyi/BuptCompiler-Project1)和 [Project2 仓库](https://github.com/XIA-Jinyi/BuptCompiler-Project2)下找到。
 
