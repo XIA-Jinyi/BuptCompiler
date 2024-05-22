@@ -40,7 +40,7 @@
 
 ## 🔗 链接
 
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=XIA-Jinyi&repo=BuptCompiler-Assignments)](https://github.com/XIA-Jinyi/BuptCompiler-Assignments)
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=XIA-Jinyi&repo=BuptCompiler-Labs)](https://github.com/XIA-Jinyi/BuptCompiler-Labs)
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=XIA-Jinyi&repo=BuptCompiler-Project1)](https://github.com/XIA-Jinyi/BuptCompiler-Project1)
-[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=XIA-Jinyi&repo=BuptCompiler-Project2)](https://github.com/XIA-Jinyi/BuptCompiler-Project2)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=XIA-Jinyi&repo=BuptCompiler-Assignments&description)](https://github.com/XIA-Jinyi/BuptCompiler-Assignments)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=XIA-Jinyi&repo=BuptCompiler-Labs&description)](https://github.com/XIA-Jinyi/BuptCompiler-Labs)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=XIA-Jinyi&repo=BuptCompiler-Project1&description)](https://github.com/XIA-Jinyi/BuptCompiler-Project1)
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=XIA-Jinyi&repo=BuptCompiler-Project2&description)](https://github.com/XIA-Jinyi/BuptCompiler-Project2)
